@@ -1,5 +1,5 @@
 {
-    "name": "maks/training.loc",
+    "name": "maks/todo",
     "autoload": {
         "psr-4": {
             "App\\": "src/"

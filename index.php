@@ -5,8 +5,13 @@ use App\Services\TaskServices;
 use App\Validators\ValidateTask;
 use App\Repository\TaskRepository;
 use App\Controllers\TaskController;
+use App\DB\DataBaseConnectios;
 
 $action = $_POST['action'] ?? '';
+
+$dbConnection = DataBaseConnectios::getInstance();
+echo'<pre>';var_dump($dbConnection->getConnection());echo'</pre>';
+die;
 
 switch($action) {
     case 'add':
