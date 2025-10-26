@@ -12,10 +12,10 @@ class  DataBaseConnectios
     /**
      * @var string
      */
-    private string $servername = 'localhost';
+    private string $servername = 'mysql-5.7';
     private string $username = 'root';
     private string $password = '';
-    private string $dbname = 'tortuga';
+    private string $dbname = 'todo';
 
     /**
      * @var PDO|null
@@ -62,6 +62,18 @@ class  DataBaseConnectios
      */
     private function connection()
     {
+        if(!$this->servername) {
+            throw new Exception('Servername is required');
+        }
+
+        if(!$this->username) {
+            throw new Exception('Username is required');
+        }
+
+        if(!$this->dbname) {
+            throw new Exception('Servername is dbname');
+        }
+
         $this->connection = new PDO("mysql:host=$this->servername;dbname=$this->dbname", $this->username, $this->password);
     }
 

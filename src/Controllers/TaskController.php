@@ -45,8 +45,6 @@ class TaskController
 
             $id = $this->taskServices->create($taskDTO);
 
-            echo'<pre>';var_dump($taskDTO);echo'</pre>';
-
         } catch (Exception $e) {}
     }
 }

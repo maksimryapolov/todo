@@ -22,7 +22,7 @@ class TaskServices
             status: $taskDTO->status
         );
 
-        echo'<pre>';var_dump($taskEntity);echo'</pre>';
+        echo'<pre>';var_dump(['test' => $taskEntity]);echo'</pre>';
         die;
 
         $taksId = $this->taskRepository->save($taskEntity);
