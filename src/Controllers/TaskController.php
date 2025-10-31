@@ -5,6 +5,7 @@ use DateTime;
 use Exception;
 use App\DTO\TaskDTO;
 use App\Entity\StatusEntity;
+use App\Services\StatusService;
 use App\Services\TaskServices;
 use App\Validators\ValidateTask;
 
@@ -20,9 +21,15 @@ class TaskController
      */
     private TaskServices $taskServices;
 
+    /**
+     * @var StatusService
+     */
+    private StatusService $statusService;
+
     public function __construct(
         TaskServices $taskServices,
         ValidateTask $validator
+        // StatusEntity $statusEntity
         //? Add other dependencies here if needed.
     ) {
         $this->validator = $validator;
@@ -40,7 +47,9 @@ class TaskController
                 name: $params['name'],
                 description: $params['description'],
                 date: $date->format('d.m.Y'),
-                status: StatusEntity::getStatusNew()
+                status: 'new'
+                // $this->statusService->getStatusByCode('new')
+                // StatusEntity::getStatusNew()
             );
 
             $id = $this->taskServices->create($taskDTO);

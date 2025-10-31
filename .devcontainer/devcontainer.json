@@ -1,0 +1,27 @@
+{
+    "name": "PHP 8.1 Docker",
+    "dockerComposeFile": "../docker-compose.yml",
+    "service": "php",
+    "workspaceFolder": "/var/www/html",
+
+    "customizations": {
+      "vscode": {
+        "settings": {
+          "php.validate.executablePath": "/usr/local/bin/php",
+          "php.version": "8.1",
+          "[php]": {
+            "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+          }
+        },
+        "extensions": [
+          "bmewburn.vscode-intelephense-client",
+          "xdebug.php-debug",
+          "mrmlnc.vscode-apache",
+          "ms-vscode.vscode-json"
+        ]
+      }
+    },
+
+    "remoteUser": "root",
+    "postCreateCommand": "git config --global --add safe.directory /var/www/html && composer install --no-interaction"
+}

@@ -9,12 +9,15 @@ use App\Repository\TaskRepository;
 class TaskServices
 {
     public function __construct(
-        private TaskRepository $taskRepository
+        private TaskRepository $taskRepository,
+        private StatusService $statusService
     )
     {}
 
     public function create(TaskDTO $taskDTO)
     {
+        echo'<pre>';var_dump($this->statusService->getNewStatus());echo'</pre>';
+
         $taskEntity = TaskEntity::createNew(
             name: $taskDTO->name,
             description: $taskDTO->description,
