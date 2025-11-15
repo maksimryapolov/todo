@@ -9,9 +9,9 @@ class TaskEntity
         readonly string $name,
         readonly string $description,
         readonly string $date,
-        readonly string $status,
+        readonly StatusEntity $status,
         readonly DateTime $createdAt,
-        readonly ?int $id = null
+        private ?int $id = null
     )
     {}
 
@@ -19,7 +19,7 @@ class TaskEntity
         string $name,
         string $description,
         string $date,
-        string $status
+        StatusEntity $status
     ): self
     {
         return new self(
@@ -29,6 +29,21 @@ class TaskEntity
             status: $status,
             createdAt: new DateTime('now')
         );
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    public function getDate(): string
+    {
+        return $this->date;
     }
 
     public function setId(int $id): void

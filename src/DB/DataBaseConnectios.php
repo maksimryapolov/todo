@@ -3,6 +3,8 @@ namespace App\DB;
 
 use PDO;
 use Exception;
+use Medoo\Medoo;
+
 /**
  * DataBaseConnectios class
  */
@@ -12,15 +14,16 @@ class  DataBaseConnectios
     /**
      * @var string
      */
-    private string $servername = 'mysql-5.7';
+    private string $type = 'mysql';
+    private string $servername = 'mysql';
     private string $username = 'root';
-    private string $password = '';
+    private string $password = '1';
     private string $dbname = 'todo';
 
     /**
-     * @var PDO|null
+     * @var Medoo|null
      */
-    private ?PDO $connection = null;
+    private ?Medoo $connection = null;
 
     /**
      * @var self|null
@@ -44,9 +47,9 @@ class  DataBaseConnectios
     /**
      * getConnection
      *
-     * @return PDO
+     * @return Medoo
      */
-    public function getConnection(): PDO
+    public function getConnection(): Medoo
     {
         if($this->connection == null) {
             $this->connection();
@@ -74,7 +77,14 @@ class  DataBaseConnectios
             throw new Exception('Servername is dbname');
         }
 
-        $this->connection = new PDO("mysql:host=$this->servername;dbname=$this->dbname", $this->username, $this->password);
+        // $this->connection = new PDO("mysql:host=$this->servername;dbname=$this->dbname", $this->username, $this->password);
+        $this->connection = new Medoo([
+            'type' => $this->type,
+            'host' => $this->servername,
+            'database' => $this->dbname,
+            'username' => $this->username,
+            'password' => $this->password
+        ]);
     }
 
     /**

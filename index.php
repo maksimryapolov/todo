@@ -6,13 +6,17 @@ use App\Controllers\TaskController;
 
 $action = $_POST['action'] ?? '';
 
-// $dbConnection = DataBaseConnectios::getInstance();
-// echo'<pre>';var_dump($dbConnection->getConnection());echo'</pre>';
-// die;
+/*
+    Подсказка
+    ENTITY = КИРПИЧ
+    REPOSITORY = СКЛАД КИРПИЧЕЙ
+    SERVICE = СТРОИТЕЛЬ
+*/
 
 switch($action) {
     case 'add':
         $container = new Container();
-        $container->get(TaskController::class)->add($_POST);
+        $task = $container->get(TaskController::class)->add($_POST);
+        // echo'<pre>';var_dump($task);echo'</pre>';
         break;
 }

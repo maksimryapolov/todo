@@ -2,22 +2,35 @@
 
 namespace App\Repository;
 
-use App\DB\QueryBuilder;
+use App\DB\DataBaseConnectios;
+use App\Entity\StatusEntity;
+use InvalidArgumentException;
 
 class StatusRepository
 {
     public function __construct(
-        private QueryBuilder $queryBuilder
+        private DataBaseConnectios $db
     )
     {}
 
-    public function getStatusByCode(string $status)
+    public function findStatusByCode(string $status): StatusEntity
     {
-        $this->queryBuilder
-            ->table('status')
-            ->where([
-                'code' => $status
-            ])
-            ->get();
+        $result = [];
+
+        if(!$status) {
+            throw new InvalidArgumentException("Status is empty");
+        }
+
+        $result = $this->db->getConnection()->get(
+            'status',
+            '*',
+            ['code' => $status]
+        );
+
+        return new StatusEntity(
+            $result['id'],
+            $result['code'],
+            $result['name']
+        );
     }
 }

@@ -14,23 +14,19 @@ class TaskServices
     )
     {}
 
-    public function create(TaskDTO $taskDTO)
+    public function create(TaskDTO $taskDTO): TaskEntity
     {
-        echo'<pre>';var_dump($this->statusService->getNewStatus());echo'</pre>';
+        // StatusService → StatusEntity → TaskEntity → TaskRepository → БД
+        // пока убрать статус из DTO если получпть статусы из ответа то получать соотв статус
+        $statusEntity = $this->statusService->getStatusNew();
 
         $taskEntity = TaskEntity::createNew(
             name: $taskDTO->name,
             description: $taskDTO->description,
             date: $taskDTO->date,
-            status: $taskDTO->status
+            status: $statusEntity
         );
 
-        echo'<pre>';var_dump(['test' => $taskEntity]);echo'</pre>';
-        die;
-
-        $taksId = $this->taskRepository->save($taskEntity);
-        $taskEntity->setId($taksId);
-
-        return $taskEntity->getId();
+        return $this->taskRepository->save($taskEntity); // Репозиторий должен возвращать сущность с установленным ID
     }
 }

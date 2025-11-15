@@ -2,7 +2,6 @@
 
 namespace App\App;
 
-use App\DB\QueryBuilder;
 use App\DB\DataBaseConnectios;
 use App\Services\TaskServices;
 use App\Validators\ValidateTask;
@@ -12,20 +11,16 @@ use App\Services\StatusService;
 
 class Container
 {
-    public function get(
-        string $className
-    )
+    public function get(string $className)
     {
         $db = DataBaseConnectios::getInstance();
-        $queryBuilder = new QueryBuilder($db);
+        // $queryBuilder = new \App\DB\QueryBuilder\QueryBuilder($db);
 
-        $statusRepository = new StatusRepository($queryBuilder);
+        $statusRepository = new StatusRepository($db);
         $statusService = new StatusService($statusRepository);
 
-        $taskepository = new TaskRepository();
+        $taskepository = new TaskRepository($db);
         $taskServices = new TaskServices($taskepository, $statusService);
-
-
 
         $validator = new ValidateTask();
 

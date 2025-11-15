@@ -1,6 +1,8 @@
 <?php
 namespace App\Services;
 
+use App\Entity\StatusEntity;
+use InvalidArgumentException;
 use App\Repository\StatusRepository;
 
 class StatusService
@@ -12,12 +14,16 @@ class StatusService
     )
     {}
 
-    public function getStatusByCode(string $code)
+    public function getStatusByCode(string $code): StatusEntity
     {
-        $this->statusRepository->getStatusByCode($code);
+        if(!$code) {
+            throw new InvalidArgumentException('Code is empty');
+        }
+
+        return $this->statusRepository->findStatusByCode($code);
     }
 
-    public function getNewStatus()
+    public function getStatusNew(): StatusEntity
     {
         return $this->getStatusByCode(self::STATUS_NEW);
     }

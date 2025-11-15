@@ -23,7 +23,7 @@ class TaskDTO
         readonly string $name,
         readonly string $description,
         readonly string $date,
-        readonly string $status
+        readonly ?string $status = null
     )
     {}
 }

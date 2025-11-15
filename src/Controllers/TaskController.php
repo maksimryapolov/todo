@@ -4,8 +4,7 @@ namespace App\Controllers;
 use DateTime;
 use Exception;
 use App\DTO\TaskDTO;
-use App\Entity\StatusEntity;
-use App\Services\StatusService;
+use App\Entity\TaskEntity;
 use App\Services\TaskServices;
 use App\Validators\ValidateTask;
 
@@ -22,21 +21,19 @@ class TaskController
     private TaskServices $taskServices;
 
     /**
-     * @var StatusService
+     * @param TaskServices $taskServices
+     * @param ValidateTask $validator
      */
-    private StatusService $statusService;
-
     public function __construct(
         TaskServices $taskServices,
         ValidateTask $validator
-        // StatusEntity $statusEntity
         //? Add other dependencies here if needed.
     ) {
         $this->validator = $validator;
         $this->taskServices = $taskServices;
     }
 
-    public function add(array $params)
+    public function add(array $params): TaskEntity
     {
         try {
             $this->validator->validate($params);
@@ -46,14 +43,11 @@ class TaskController
             $taskDTO = new TaskDTO(
                 name: $params['name'],
                 description: $params['description'],
-                date: $date->format('d.m.Y'),
-                status: 'new'
-                // $this->statusService->getStatusByCode('new')
-                // StatusEntity::getStatusNew()
+                date: $date->format('Y-m-d H:i:s'),
+                // status: 'new'
             );
 
-            $id = $this->taskServices->create($taskDTO);
-
+            return $this->taskServices->create($taskDTO);
         } catch (Exception $e) {}
     }
 }
