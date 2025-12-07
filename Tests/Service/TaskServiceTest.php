@@ -44,7 +44,7 @@ class TaskServiceTest extends TestCase
         $this->statusServiceMock = $this->createMock(StatusService::class);
     }
 
-    public function testAddTask()
+    public function testAddTaskService()
     {
         // Настраиваем заглушку.
         // Мы ожидаем, что метод save будет вызван ровно 1 раз.

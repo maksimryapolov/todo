@@ -8,6 +8,7 @@ use App\Validators\ValidateTask;
 use App\Repository\TaskRepository;
 use App\Repository\StatusRepository;
 use App\Services\StatusService;
+use App\Validators\ValidateContext;
 
 class Container
 {
@@ -22,10 +23,11 @@ class Container
         $taskepository = new TaskRepository($db);
         $taskServices = new TaskServices($taskepository, $statusService);
 
-        $validator = new ValidateTask();
+        $context = new ValidateContext();
+        $context->setValidator(new ValidateTask());
 
         $controller = new $className(
-            validator: $validator,
+            validator: $context,
             taskServices: $taskServices
         );
 

@@ -6,37 +6,35 @@ use Exception;
 use App\DTO\TaskDTO;
 use App\Entity\TaskEntity;
 use App\Services\TaskServices;
-use App\Validators\ValidateTask;
+use App\Validators\ValidateContext;
+
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Psr7\Factory\ResponseFactory;
 
 class TaskController
 {
     /**
-     * @var ValidateTask
-     */
-    private ValidateTask $validator;
-
-    /**
-     * @var TaskServices
-     */
-    private TaskServices $taskServices;
-
-    /**
      * @param TaskServices $taskServices
-     * @param ValidateTask $validator
+     * @param ValidateContext $validator
      */
     public function __construct(
-        TaskServices $taskServices,
-        ValidateTask $validator
+        private ValidateContext $validator,
+        private TaskServices $taskServices
         //? Add other dependencies here if needed.
-    ) {
-        $this->validator = $validator;
-        $this->taskServices = $taskServices;
-    }
+    ) {}
 
-    public function add(array $params): TaskEntity
+    public function add(Request $request, ResponseInterface $response)// : ResponseInterface // : TaskEntity // Контроллер должен отдавать Respone PSR-7
     {
         try {
+            // new ResponseFactory
+            $params = $request->getParsedBody();
             $this->validator->validate($params);
+
+            if (!empty($this->validator->getErrors())) {
+                throw new Exception(implode(', ', $this->validator->getErrors()), 403);
+            }
 
             $date = new DateTime($params['date']);
 
@@ -47,7 +45,14 @@ class TaskController
                 // status: 'new'
             );
 
-            return $this->taskServices->create($taskDTO);
-        } catch (Exception $e) {}
+            $data = $this->taskServices->create($taskDTO);
+            echo'<pre>';var_dump($data);echo'</pre>';
+            die;
+            $response->getBody()->write(json_encode($data));
+            $response = $response->withHeader('Content-Type', 'application/json'); // ->withHeaders()->withStatus();
+            return $response;
+        } catch (Exception $e) {
+            echo'<pre>';print($e->getMessage());echo'</pre>';
+        }
     }
 }
