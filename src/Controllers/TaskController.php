@@ -1,31 +1,31 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\Controllers;
 
-use DateTime;
-use Exception;
+use App\Controllers\interfaces\ControllerInterface;
 use App\DTO\TaskDTO;
-use App\Entity\TaskEntity;
 use App\Services\TaskServices;
 use App\Validators\ValidateContext;
-
+use App\Views\TaskView;
+use DateTime;
+use Exception;
 use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Slim\Psr7\Factory\ResponseFactory;
 
-class TaskController
+class TaskController implements ControllerInterface
 {
     /**
-     * @param TaskServices $taskServices
-     * @param ValidateContext $validator
      */
     public function __construct(
         private ValidateContext $validator,
         private TaskServices $taskServices
         //? Add other dependencies here if needed.
-    ) {}
+    ) {
+    }
 
-    public function add(Request $request, ResponseInterface $response)// : ResponseInterface // : TaskEntity // Контроллер должен отдавать Respone PSR-7
+    public function add(Request $request, Response $response): Response // : TaskEntity // Контроллер должен отдавать Respone PSR-7
     {
         try {
             // new ResponseFactory
@@ -45,14 +45,17 @@ class TaskController
                 // status: 'new'
             );
 
-            $data = $this->taskServices->create($taskDTO);
-            echo'<pre>';var_dump($data);echo'</pre>';
-            die;
+            $taskEntity = $this->taskServices->create($taskDTO);
+            $view = new TaskView();
+            $data = $view->getListData($taskEntity);
+
             $response->getBody()->write(json_encode($data));
             $response = $response->withHeader('Content-Type', 'application/json'); // ->withHeaders()->withStatus();
             return $response;
         } catch (Exception $e) {
-            echo'<pre>';print($e->getMessage());echo'</pre>';
+            echo'<pre>';
+            print($e->getMessage());
+            echo'</pre>';
         }
     }
 }

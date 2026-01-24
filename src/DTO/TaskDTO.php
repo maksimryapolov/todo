@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\DTO;
 
 use DateTime;
@@ -20,10 +22,10 @@ class TaskDTO
     // readonly DateTime $dateTime;
 
     public function __construct(
-        readonly string $name,
-        readonly string $description,
-        readonly string $date,
-        readonly ?string $status = null
-    )
-    {}
+        public readonly string $name,
+        public readonly string $description,
+        public readonly string $date,
+        public readonly ?string $status = null
+    ) {
+    }
 }

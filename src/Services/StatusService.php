@@ -1,22 +1,25 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Entity\StatusEntity;
-use InvalidArgumentException;
 use App\Repository\StatusRepository;
+use InvalidArgumentException;
 
 class StatusService
 {
-    const STATUS_NEW = 'new';
+    public const STATUS_NEW = 'new';
 
     public function __construct(
         private StatusRepository $statusRepository
-    )
-    {}
+    ) {
+    }
 
     public function getStatusByCode(string $code): StatusEntity
     {
-        if(!$code) {
+        if (!$code) {
             throw new InvalidArgumentException('Code is empty');
         }
 

@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\DB;
+
+use PDO;
 
 class QueryBuilder
 {
     /**
-     * @var string
      */
     private string $table;
     private array $selectParams = [];
@@ -13,16 +16,15 @@ class QueryBuilder
     private array $whereValues = [];
 
     /**
-     * @param DataBaseConnectios $dataBaseConnectios
      */
     public function __construct(
         public DataBaseConnectios $dataBaseConnectios,
-    )
-    {}
+    ) {
+    }
 
     public function where(array $params = []): QueryBuilder
     {
-        if(!empty($params)) {
+        if (!empty($params)) {
             $this->whereParams = array_keys($params);
             $this->whereValues = $params;
         }
@@ -31,8 +33,6 @@ class QueryBuilder
     }
 
     /**
-     * @param string $table
-     * @return QueryBuilder
      */
     public function table(string $table): QueryBuilder
     {
@@ -41,8 +41,6 @@ class QueryBuilder
     }
 
     /**
-     * @param array $params
-     * @return QueryBuilder
      */
     public function select(array $params): QueryBuilder
     {
@@ -52,21 +50,18 @@ class QueryBuilder
 
     /**
      *
-     * @return QueryBuilder
      */
     public function get(): QueryBuilder
     {
         $query = 'SELECT * from ' . $this->table;
 
 
-        if($this->checkWhereParams()) {
+        if ($this->checkWhereParams()) {
             $query .= ' WHERE ';
         }
 
         $result = array_map(
-            function($item) {
-                return $item . " = :" . $item;
-            },
+            static fn ($item) => $item . " = :" . $item,
             $this->whereParams
         );
 
@@ -76,7 +71,7 @@ class QueryBuilder
         $stmt = $connection->prepare($query);
         $stmt->execute($this->whereValues);
 
-        return $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     private function checkWhereParams()

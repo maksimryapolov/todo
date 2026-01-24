@@ -1,28 +1,38 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use DateTime;
+use InvalidArgumentException;
 
-class TaskEntity
+class TaskEntity implements IEntity
 {
     public function __construct(
-        readonly string $name,
-        readonly string $description,
-        readonly string $date,
-        readonly StatusEntity $status,
-        readonly DateTime $createdAt,
+        public readonly string $name,
+        public readonly string $description,
+        public readonly string $date,
+        public readonly StatusEntity $status,
+        public readonly DateTime $createdAt,
         private ?int $id = null
-    )
-    {}
+    ) {
+    }
 
     public static function createNew(
         string $name,
         string $description,
         string $date,
         StatusEntity $status
-    ): self
-    {
+    ): self {
+        if (
+            empty($name) ||
+            empty($description) ||
+            empty($date)
+        ) {
+            throw new InvalidArgumentException("One of the parameters is empty");
+        }
+
         return new self(
             name: $name,
             description: $description,
@@ -55,5 +65,28 @@ class TaskEntity
     public function getId(): ?int
     {
         return $this->id ?? null;
+    }
+
+    public function getStatus(): StatusEntity
+    {
+        return $this->status;
+    }
+
+    public function getCreatedAt(): DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function createdAtToString(string $format = 'd.m.Y'): string
+    {
+        if ($this->createdAt instanceof DateTime) {
+            return $this->createdAt->format($format);
+        }
+        return '';
+    }
+
+    public function getCode(): string
+    {
+        return "";
     }
 }

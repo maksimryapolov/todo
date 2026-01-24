@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\DTO\TaskDTO;
@@ -11,8 +13,8 @@ class TaskServices
     public function __construct(
         private TaskRepository $taskRepository,
         private StatusService $statusService
-    )
-    {}
+    ) {
+    }
 
     public function create(TaskDTO $taskDTO): TaskEntity
     {
@@ -27,6 +29,7 @@ class TaskServices
             status: $statusEntity
         );
 
-        return $this->taskRepository->save($taskEntity); // Репозиторий должен возвращать сущность с установленным ID
+        $taskEntity = $this->taskRepository->save($taskEntity); // Репозиторий должен возвращать сущность с установленным ID
+        return $taskEntity;
     }
 }

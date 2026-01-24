@@ -8,7 +8,12 @@ use Slim\Psr7\Response;
 
 $request = ServerRequestFactory::createFromGlobals();
 
-$action = $_POST['action'] ?? '';
+$parseBody = $request->getParsedBody();
+$action = '';
+
+if(isset($parseBody['action'])) {
+    $action = trim($parseBody['action']);
+}
 
 $response = new Response();
 

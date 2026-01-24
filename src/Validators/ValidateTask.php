@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\Validators;
 
 use App\Validators\Interfaces\ValidateInterface;
@@ -11,15 +14,14 @@ class ValidateTask implements ValidateInterface
      *    name: string,
      *    date: string
      * } $params
-     * @return void
      */
     public function validate(array $params): void
     {
-        if(!isset($params['name']) || empty($params['name']) || strlen($params['name']) <= 1) {
+        if (!isset($params['name']) || empty($params['name']) || strlen($params['name']) <= 1) {
             $this->errors[] = 'Name is required and must be at least 2 characters long';
         }
 
-        if(!$params['date']) {
+        if (!$params['date']) {
             $this->errors[] = 'Date is required';
         }
 
@@ -39,9 +41,9 @@ class ValidateName
 {
     private string $error;
 
-    public function validate(string $name): bool
+    public function validate(string $name): void
     {
-        if(!$name && strlen($name) <= 1) {
+        if (!$name && strlen($name) <= 1) {
             $this->error = 'Name is required and must be at least 2 characters long';
         }
     }
@@ -59,11 +61,11 @@ class ValidateRulesTask
         return [
             'name' => '',
             'description' => '',
-            'date' => ''
+            'date' => '',
         ];
     }
 
-    public function validateName($name)
+    public function validateName($name): void
     {
         $validate = new ValidateName();
         $validate->$validate($name);

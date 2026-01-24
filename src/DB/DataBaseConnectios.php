@@ -1,18 +1,20 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\DB;
 
-use PDO;
 use Exception;
 use Medoo\Medoo;
+use PDO;
 
 /**
  * DataBaseConnectios class
  */
-class  DataBaseConnectios
+class DataBaseConnectios
 {
     // TODO: Вынести в .env
     /**
-     * @var string
      */
     private string $type = 'mysql';
     private string $servername = 'mysql';
@@ -21,23 +23,20 @@ class  DataBaseConnectios
     private string $dbname = 'todo';
 
     /**
-     * @var Medoo|null
      */
     private ?Medoo $connection = null;
 
     /**
-     * @var self|null
      */
     private static ?self $instance = null;
 
     /**
      * getInstance
      *
-     * @return self
      */
     public static function getInstance(): self
     {
-        if(self::$instance == null) {
+        if (self::$instance === null) {
             self::$instance = new self();
         }
 
@@ -47,11 +46,10 @@ class  DataBaseConnectios
     /**
      * getConnection
      *
-     * @return Medoo
      */
     public function getConnection(): Medoo
     {
-        if($this->connection == null) {
+        if ($this->connection === null) {
             $this->connection();
         }
 
@@ -63,17 +61,17 @@ class  DataBaseConnectios
      *
      * @return void
      */
-    private function connection()
+    private function connection(): void
     {
-        if(!$this->servername) {
+        if (!$this->servername) {
             throw new Exception('Servername is required');
         }
 
-        if(!$this->username) {
+        if (!$this->username) {
             throw new Exception('Username is required');
         }
 
-        if(!$this->dbname) {
+        if (!$this->dbname) {
             throw new Exception('Servername is dbname');
         }
 
@@ -83,7 +81,7 @@ class  DataBaseConnectios
             'host' => $this->servername,
             'database' => $this->dbname,
             'username' => $this->username,
-            'password' => $this->password
+            'password' => $this->password,
         ]);
     }
 
@@ -93,7 +91,8 @@ class  DataBaseConnectios
      * @return void
      */
     private function __construct()
-    {}
+    {
+    }
 
     /**
      * __clone
@@ -101,14 +100,15 @@ class  DataBaseConnectios
      * @return void
      */
     private function __clone()
-    {}
+    {
+    }
 
     /**
      * __wakeup
      *
      * @return void
      */
-    public function __wakeup()
+    public function __wakeup(): void
     {
         throw new Exception("Cannot unserialize singleton");
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\DTO\TaskDTO;
 use App\Entity\StatusEntity;
 use App\Entity\TaskEntity;
@@ -9,6 +11,9 @@ use App\Services\TaskServices;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class TaskServiceTest extends TestCase
 {
     private TaskDTO $dto;
@@ -44,12 +49,12 @@ class TaskServiceTest extends TestCase
         $this->statusServiceMock = $this->createMock(StatusService::class);
     }
 
-    public function testAddTaskService()
+    public function testAddTaskService(): void
     {
         // Настраиваем заглушку.
         // Мы ожидаем, что метод save будет вызван ровно 1 раз.
-        $this->taskRepositoryMock->expects($this->once())->method('save')->willReturn($this->taskEntity); // Можно заставить метод возвращать определенное значение
-        $this->statusServiceMock->expects($this->once())->method('getStatusNew')->willReturn($this->statusEntity);
+        $this->taskRepositoryMock->expects(self::once())->method('save')->willReturn($this->taskEntity); // Можно заставить метод возвращать определенное значение
+        $this->statusServiceMock->expects(self::once())->method('getStatusNew')->willReturn($this->statusEntity);
 
         // Создаем экземпляр тестируемого сервиса, передавая ему заглушку
         $taskService = new TaskServices(
@@ -64,10 +69,10 @@ class TaskServiceTest extends TestCase
         // 3. ASSERT (ПРОВЕРКА)
         // Проверяем, что метод вернул то, что ожидалось
         // Например, что он вернул объект
-        $this->assertInstanceOf(TaskEntity::class, $taskEntity);
-        $this->assertInstanceOf(StatusEntity::class, $taskEntity->status);
+        self::assertInstanceOf(TaskEntity::class, $taskEntity);
+        self::assertInstanceOf(StatusEntity::class, $taskEntity->status);
 
-        $this->assertEquals($taskEntity->getName(), $this->taskName);
-        $this->assertEquals($taskEntity->getDescription(), $this->taskDesk);
+        self::assertEquals($taskEntity->getName(), $this->taskName);
+        self::assertEquals($taskEntity->getDescription(), $this->taskDesk);
     }
 }

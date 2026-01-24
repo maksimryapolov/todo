@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\DB\DataBaseConnectios;
@@ -10,14 +12,14 @@ class StatusRepository
 {
     public function __construct(
         private DataBaseConnectios $db
-    )
-    {}
+    ) {
+    }
 
     public function findStatusByCode(string $status): StatusEntity
     {
         $result = [];
 
-        if(!$status) {
+        if (!$status) {
             throw new InvalidArgumentException("Status is empty");
         }
 

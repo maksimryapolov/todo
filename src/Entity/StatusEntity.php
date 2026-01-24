@@ -1,17 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
-use App\Repository\StatusRepository;
-
-class StatusEntity
+class StatusEntity implements IEntity
 {
     public function __construct(
         private int $id,
         private string $code,
         private string $name
-    )
-    {}
+    ) {
+    }
 
     public function getId(): int
     {
