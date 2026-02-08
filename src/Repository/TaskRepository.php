@@ -18,10 +18,10 @@ class TaskRepository
     {
         $connection = $this->db->getConnection();
         $connection->insert("task", [
-            "name" => $taskEntity->name,
+            "title" => $taskEntity->name,
             "description" => $taskEntity->description,
             "created_at" => $taskEntity->date,
-            'status' => $taskEntity->status->getId(),
+            'status_id' => $taskEntity->status->getId(),
         ]);
 
         $taskEntity->setId((int)$connection->id());
