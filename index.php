@@ -7,6 +7,8 @@ use Slim\Psr7\Factory\ServerRequestFactory;
 use Slim\Psr7\Response;
 
 $request = ServerRequestFactory::createFromGlobals();
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
 $parseBody = $request->getParsedBody();
 $action = '';

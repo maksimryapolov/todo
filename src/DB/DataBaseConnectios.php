@@ -13,14 +13,13 @@ use PDO;
  */
 class DataBaseConnectios
 {
-    // TODO: Вынести в .env
     /**
      */
     private string $type = 'mysql';
-    private string $servername = 'mysql';
-    private string $username = 'root';
-    private string $password = '1';
-    private string $dbname = 'todo';
+    private string $servername = '';
+    private string $username = '';
+    private string $password = '';
+    private string $dbname = '';
 
     /**
      */
@@ -59,7 +58,6 @@ class DataBaseConnectios
     /**
      * connection
      *
-     * @return void
      */
     private function connection(): void
     {
@@ -92,6 +90,10 @@ class DataBaseConnectios
      */
     private function __construct()
     {
+        $this->servername = $_ENV['DB_HOST'];
+        $this->username = $_ENV['DB_LOGIN'];
+        $this->password = $_ENV['DB_PASS'];
+        $this->dbname = $_ENV['DB_NAME'];
     }
 
     /**
@@ -106,7 +108,6 @@ class DataBaseConnectios
     /**
      * __wakeup
      *
-     * @return void
      */
     public function __wakeup(): void
     {
