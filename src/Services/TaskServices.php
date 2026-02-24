@@ -10,12 +10,20 @@ use App\Repository\TaskRepository;
 
 class TaskServices
 {
+    /**
+     * @param TaskRepository $taskRepository
+     * @param StatusService $statusService
+     */
     public function __construct(
         private TaskRepository $taskRepository,
         private StatusService $statusService
     ) {
     }
 
+    /**
+     * @param TaskDTO $taskDTO
+     * @return TaskEntity
+     */
     public function create(TaskDTO $taskDTO): TaskEntity
     {
         // StatusService → StatusEntity → TaskEntity → TaskRepository → БД
@@ -31,5 +39,17 @@ class TaskServices
 
         $taskEntity = $this->taskRepository->save($taskEntity); // Репозиторий должен возвращать сущность с установленным ID
         return $taskEntity;
+    }
+
+    /**
+     * @return array<TaskEntity>
+     */
+    public function getTasks(): array
+    {
+        $data = [];
+
+        $this->taskRepository->getTasks();
+
+        return $data;
     }
 }

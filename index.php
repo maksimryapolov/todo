@@ -25,10 +25,14 @@ $response = new Response();
     SERVICE = СТРОИТЕЛЬ
 */
 
+$container = new Container();
+
 switch($action) {
     case 'add':
-        $container = new Container();
         sendResponse($container->get(TaskController::class)->add($request, $response));
+        break;
+    default:
+        $container->get(TaskController::class)->getTasks($request, $response);
         break;
 }
 

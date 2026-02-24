@@ -21,6 +21,12 @@ class TaskDTO
 {
     // readonly DateTime $dateTime;
 
+    /**
+     * @param string $name
+     * @param string $description
+     * @param string $date
+     * @param string|null $status
+     */
     public function __construct(
         public readonly string $name,
         public readonly string $description,

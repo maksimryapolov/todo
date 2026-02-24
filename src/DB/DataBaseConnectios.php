@@ -14,25 +14,46 @@ use PDO;
 class DataBaseConnectios
 {
     // TODO: Вынести в .env
+
     /**
+     * @var string
      */
     private string $type = 'mysql';
+
+    /**
+     * @var string
+     */
     private string $servername = 'mysql';
+
+    /**
+     * @var string
+     */
     private string $username = 'root';
+
+    /**
+     * @var string
+     */
     private string $password = '1';
+
+    /**
+     * @var string
+     */
     private string $dbname = 'todo';
 
     /**
+     * Undocumented variable
+     *
+     * @var Medoo|null
      */
     private ?Medoo $connection = null;
 
     /**
-     */
+     * @var self|null
+    */
     private static ?self $instance = null;
 
     /**
-     * getInstance
-     *
+     * @return self
      */
     public static function getInstance(): self
     {
@@ -44,8 +65,7 @@ class DataBaseConnectios
     }
 
     /**
-     * getConnection
-     *
+     * @return Medoo
      */
     public function getConnection(): Medoo
     {
@@ -57,8 +77,6 @@ class DataBaseConnectios
     }
 
     /**
-     * connection
-     *
      * @return void
      */
     private function connection(): void

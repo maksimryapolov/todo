@@ -12,11 +12,18 @@ class StatusService
 {
     public const STATUS_NEW = 'new';
 
+    /**
+     * @param StatusRepository $statusRepository
+     */
     public function __construct(
         private StatusRepository $statusRepository
     ) {
     }
 
+    /**
+     * @param string $code
+     * @return StatusEntity
+     */
     public function getStatusByCode(string $code): StatusEntity
     {
         if (!$code) {
@@ -26,6 +33,9 @@ class StatusService
         return $this->statusRepository->findStatusByCode($code);
     }
 
+    /**
+     * @return StatusEntity
+     */
     public function getStatusNew(): StatusEntity
     {
         return $this->getStatusByCode(self::STATUS_NEW);

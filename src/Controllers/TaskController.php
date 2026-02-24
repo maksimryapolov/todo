@@ -14,9 +14,11 @@ use Exception;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-class TaskController implements ControllerInterface
+class TaskController extends BaseController // implements ControllerInterface
 {
     /**
+     * @param ValidateContext $validator
+     * @param TaskServices $taskServices
      */
     public function __construct(
         private ValidateContext $validator,
@@ -25,7 +27,12 @@ class TaskController implements ControllerInterface
     ) {
     }
 
-    public function add(Request $request, Response $response): Response // : TaskEntity // Контроллер должен отдавать Respone PSR-7
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return Response
+     */
+    public function add(Request $request, Response $response): Response
     {
         try {
             // new ResponseFactory
@@ -49,13 +56,25 @@ class TaskController implements ControllerInterface
             $view = new TaskView();
             $data = $view->getListData($taskEntity);
 
-            $response->getBody()->write(json_encode($data));
-            $response = $response->withHeader('Content-Type', 'application/json'); // ->withHeaders()->withStatus();
+            return $this->createResponse($response, data: $data);
+        } catch (Exception $e) {
+            return $this->createResponse($response, data: null, error: $e);
+        }
+    }
+
+    public function getTasks(Request $request, Response $response): Response
+    {
+        try {
+            $data = [];
+            $this->taskServices->getTasks();
+
+
+            $response->getBody()->write(json_encode(['data' => $data]));
+            $response = $response->withHeader('Content-Type', 'application/json');
             return $response;
         } catch (Exception $e) {
-            echo'<pre>';
-            print($e->getMessage());
-            echo'</pre>';
+            $response->getBody()->write(json_encode(['error' => $e->getMessage()]));
+            return $response->withHeader('Content-Type', 'application/json');
         }
     }
 }

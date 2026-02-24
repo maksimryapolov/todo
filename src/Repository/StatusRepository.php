@@ -10,11 +10,18 @@ use InvalidArgumentException;
 
 class StatusRepository
 {
+    /**
+     * @param DataBaseConnectios $db
+     */
     public function __construct(
         private DataBaseConnectios $db
     ) {
     }
 
+    /**
+     * @param string $status
+     * @return StatusEntity
+     */
     public function findStatusByCode(string $status): StatusEntity
     {
         $result = [];
