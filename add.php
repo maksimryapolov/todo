@@ -153,7 +153,7 @@
             <div class="form-group">
                 <label for="taskDate">Срок выполнения</label>
                 <div class="date-input">
-                    <input type="date" id="taskDate" name="date" required>
+                    <input type="datetime-local" id="taskDate" name="date" required>
                 </div>
             </div>
 

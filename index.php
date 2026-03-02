@@ -5,9 +5,10 @@ use App\App\Container;
 use App\Controllers\TaskController;
 use Slim\Psr7\Factory\ServerRequestFactory;
 use Slim\Psr7\Response;
+use Dotenv\Dotenv;
 
 $request = ServerRequestFactory::createFromGlobals();
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
 $parseBody = $request->getParsedBody();
@@ -27,10 +28,14 @@ $response = new Response();
     SERVICE = СТРОИТЕЛЬ
 */
 
+$container = new Container();
+
 switch($action) {
     case 'add':
-        $container = new Container();
         sendResponse($container->get(TaskController::class)->add($request, $response));
+        break;
+    default:
+        sendResponse($container->get(TaskController::class)->get($request, $response));
         break;
 }
 

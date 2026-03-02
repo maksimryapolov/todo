@@ -24,8 +24,8 @@ class TaskDTO
     public function __construct(
         public readonly string $name,
         public readonly string $description,
-        public readonly string $date,
-        public readonly ?string $status = null
+        public readonly string $deadline,
+        public readonly ?string $statusId = null
     ) {
     }
 }

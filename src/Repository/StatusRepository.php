@@ -35,4 +35,24 @@ class StatusRepository
             $result['name']
         );
     }
+
+    /**
+     * @param int $id
+     *
+     * @return StatusEntity
+     */
+    public function getById(int $id): StatusEntity
+    {
+        $result = $this->db->getConnection()->get(
+            'status',
+            '*',
+            ['id' => $id]
+        );
+
+        return new StatusEntity(
+            $result['id'],
+            $result['code'],
+            $result['name']
+        );
+    }
 }

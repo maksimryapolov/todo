@@ -12,9 +12,10 @@ class TaskEntity implements IEntity
     public function __construct(
         public readonly string $name,
         public readonly string $description,
-        public readonly string $date,
-        public readonly StatusEntity $status,
+        public readonly string $deadline,
+        public readonly int $statusId,
         public readonly DateTime $createdAt,
+        private ?StatusEntity $status = null,
         private ?int $id = null
     ) {
     }
@@ -22,13 +23,14 @@ class TaskEntity implements IEntity
     public static function createNew(
         string $name,
         string $description,
-        string $date,
-        StatusEntity $status
+        string $deadline,
+        int $statusId,
+        ?StatusEntity $status = null
     ): self {
         if (
             empty($name) ||
             empty($description) ||
-            empty($date)
+            empty($deadline)
         ) {
             throw new InvalidArgumentException("One of the parameters is empty");
         }
@@ -36,10 +38,55 @@ class TaskEntity implements IEntity
         return new self(
             name: $name,
             description: $description,
-            date: $date,
+            deadline: $deadline,
             status: $status,
-            createdAt: new DateTime('now')
+            createdAt: new DateTime('now'),
+            statusId: $statusId
         );
+    }
+
+    /**
+     * @param array{
+     *  id: int,
+     *  title: string,
+     *  description: string,
+     *  created_at: DateTime,
+     *  deadline: string,
+     *  statusId: int
+     * } $data
+     *
+     * @return array<TaskEntity>
+     */
+    public static function initFromArray(array $data): array
+    {
+        return array_map(static function($item) {
+                return new self(
+                    name: $item['title'],
+                    description: $item['description'],
+                    deadline: $item['deadline'],
+                    statusId: (int)$item['statusId'],
+                    createdAt: (new DateTime($item['created_at'])),
+                    id: (int)$item['id']
+                );
+            },
+            $data
+        ) ?? [];
+    }
+
+    /** @return int */
+    public function getStatusId(): int
+    {
+        return $this->statusId ?? 0;
+    }
+
+    /**
+     * @param StatusEntity $status
+     *
+     * @return void
+     */
+    public function setStatus(StatusEntity $status): void
+    {
+        $this->status = $status;
     }
 
     public function getName(): string
@@ -54,7 +101,7 @@ class TaskEntity implements IEntity
 
     public function getDate(): string
     {
-        return $this->date;
+        return $this->deadline;
     }
 
     public function setId(int $id): void

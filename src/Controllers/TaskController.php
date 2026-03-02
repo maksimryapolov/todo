@@ -14,7 +14,7 @@ use Exception;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-class TaskController implements ControllerInterface
+class TaskController // implements ControllerInterface
 {
     /**
      */
@@ -41,21 +41,66 @@ class TaskController implements ControllerInterface
             $taskDTO = new TaskDTO(
                 name: $params['name'],
                 description: $params['description'],
-                date: $date->format('Y-m-d H:i:s'),
+                deadline: $date->format('Y-m-d H:i:s'),
                 // status: 'new'
             );
 
             $taskEntity = $this->taskServices->create($taskDTO);
             $view = new TaskView();
-            $data = $view->getListData($taskEntity);
 
-            $response->getBody()->write(json_encode($data));
-            $response = $response->withHeader('Content-Type', 'application/json'); // ->withHeaders()->withStatus();
-            return $response;
-        } catch (Exception $e) {
-            echo'<pre>';
-            print($e->getMessage());
-            echo'</pre>';
+            $data = $view->getListData($taskEntity);
+            echo'<pre>';var_dump($taskEntity);echo'</pre>';
+            die;
+            $result = [
+                'data' => $data,
+                'error' => []
+            ];
+            $response->getBody()->write(json_encode($result));
+            return $response->withHeader('Content-Type', 'application/json'); // ->withHeaders()->withStatus();
+        } catch (\Throwable $e) {
+            $result = [
+                'data' => [],
+                'error' => [
+                    'code' => '',
+                    'message' => $e->getMessage()
+                ]
+            ];
+            $response->getBody()->write(json_encode($result));
+            return $response->withHeader('Content-Type', 'application/json');
+        }
+    }
+
+    public function get(Request $request, Response $response): Response
+    {
+        try {
+            $data = [];
+
+            $tasksEntities = $this->taskServices->getList(
+                limit: 10,
+                offset: 0,
+                sort: 'created_ad',
+                sortBy: 'DESC'
+            );
+
+            $view = new TaskView();
+            // $data = $view->getListData($tasksEntities);
+
+            $result = [
+                'data' => $data,
+                'error' => []
+            ];
+            $response->getBody()->write(json_encode($result));
+            return $response->withHeader('Content-Type', 'application/json'); // ->withHeaders()->withStatus();
+        } catch (\Throwable $e) {
+            $result = [
+                'data' => [],
+                'error' => [
+                    'code' => '',
+                    'message' => $e->getMessage()
+                ]
+            ];
+            $response->getBody()->write(json_encode($result));
+            return $response->withHeader('Content-Type', 'application/json');
         }
     }
 }

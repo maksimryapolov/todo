@@ -17,7 +17,7 @@ use App\Validators\ValidateTask;
 
 class Container
 {
-    public function get(string $className): ControllerInterface
+    public function get(string $className)// : ControllerInterface
     {
         $controller = match($className) {
             TaskController::class => $this->initTaskController()
@@ -26,7 +26,7 @@ class Container
         return $controller;
     }
 
-    private function initTaskController(): ControllerInterface
+    private function initTaskController()// : ControllerInterface
     {
         $db = DataBaseConnectios::getInstance();
         // $queryBuilder = new \App\DB\QueryBuilder\QueryBuilder($db);

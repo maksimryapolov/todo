@@ -26,7 +26,7 @@ class ValidateTask implements ValidateInterface
         }
 
         $date = $params['date'];
-        if (!preg_match('/^(\d{4})\-(\d{2})\-(\d{2})$/', $date, $matches)) {
+        if (!preg_match('/^(\d{4})-(\d{2})-(\d{2})(T\d{2}:\d{2})?$/', $date, $matches)) {
             $this->errors[] = 'The date is not a valid format.';
         }
     }
