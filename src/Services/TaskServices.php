@@ -88,17 +88,6 @@ class TaskServices
             $taskEntity->setStatus($statusesEntity[$taskEntity->getStatusId()]);
         }
     }
-    /**
-     * @return array<TaskEntity>
-     */
-    public function getTasks(): array
-    {
-        $data = [];
-
-        $this->taskRepository->getTasks();
-
-        return $data;
-    }
 
     /**
      * @param TaskEntity $task

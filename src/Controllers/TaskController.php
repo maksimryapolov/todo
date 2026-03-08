@@ -7,7 +7,6 @@ namespace App\Controllers;
 use App\DTO\TaskDTO;
 use App\Services\TaskServices;
 use App\Validators\ValidateContext;
-use App\Views\TaskView;
 use DateTime;
 use Exception;
 use Psr\Http\Message\ResponseInterface as Response;
