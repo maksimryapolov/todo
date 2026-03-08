@@ -27,4 +27,28 @@ class TaskView extends BaseView
 
         return [];
     }
+
+    /**
+     * @param array $tasks
+     * @return array
+     */
+    public static function getViewList(array $tasks): array
+    {
+        return array_map(static fn($task) => self::getItem($task), $tasks);
+    }
+
+    /**
+     * @param TaskEntity $task
+     * @return array<string, string|int>
+     */
+    public static function getItem(TaskEntity $task): array
+    {
+        return [
+            'id' => $task->getId(),
+            'name' => $task->getName(),
+            'slug' => $task->getCode(),
+            'description' => $task->getDescription(),
+            'createdAt' => $task->createdAtToString(),
+        ];
+    }
 }

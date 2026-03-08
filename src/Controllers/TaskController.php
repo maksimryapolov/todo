@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Controllers\interfaces\ControllerInterface;
 use App\DTO\TaskDTO;
 use App\Services\TaskServices;
 use App\Validators\ValidateContext;
@@ -43,76 +42,33 @@ class TaskController extends BaseController // implements ControllerInterface
                 throw new Exception(implode(', ', $this->validator->getErrors()), 403);
             }
 
-            $date = new DateTime($params['date']);
-
             $taskDTO = new TaskDTO(
                 name: $params['name'],
                 description: $params['description'],
-                deadline: $date->format('Y-m-d H:i:s'),
+                deadline: (new DateTime($params['date']))->format('Y-m-d H:i:s'),
                 // status: 'new'
             );
-
             $taskEntity = $this->taskServices->create($taskDTO);
-            $view = new TaskView();
 
-            $data = $view->getListData($taskEntity);
-            echo'<pre>';var_dump($taskEntity);echo'</pre>';
-            die;
-            $result = [
-                'data' => $data,
-                'error' => []
-            ];
-            $response->getBody()->write(json_encode($result));
-            return $response->withHeader('Content-Type', 'application/json'); // ->withHeaders()->withStatus();
+            return $this->createResponse($response, data: $this->taskServices->getViewItemData($taskEntity) ?? []);
         } catch (\Throwable $e) {
-            $result = [
-                'data' => [],
-                'error' => [
-                    'code' => '',
-                    'message' => $e->getMessage()
-                ]
-            ];
-            $response->getBody()->write(json_encode($result));
-            return $response->withHeader('Content-Type', 'application/json');
+            return $this->createResponse($response, data: null, error: $e);
         }
-
-        // осталовь в результате конфликта
-        //     return $this->createResponse($response, data: $data);
-        // } catch (Exception $e) {
-        //     return $this->createResponse($response, data: null, error: $e);
-        // }
     }
 
     public function get(Request $request, Response $response): Response
     {
         try {
-            $data = [];
-
             $tasksEntities = $this->taskServices->getList(
                 limit: 10,
                 offset: 0,
-                sort: 'created_ad',
+                sort: 'created_at',
                 sortBy: 'DESC'
             );
 
-            $view = new TaskView();
-            // $data = $view->getListData($tasksEntities);
-
-            $result = [
-                'data' => $data,
-                'error' => []
-            ];
-            $response->getBody()->write(json_encode($result));
-            return $response->withHeader('Content-Type', 'application/json'); // ->withHeaders()->withStatus();
+            return $this->createResponse($response, data: $this->taskServices->getViewListData($tasksEntities) ?? []);
         } catch (\Throwable $e) {
-            $result = [
-                'data' => [],
-                'error' => [
-                    'code' => '',
-                    'message' => $e->getMessage()
-                ]
-            ];
-            $response->getBody()->write(json_encode($result));
+            return $this->createResponse($response, data: null, error: $e);
         }
     }
 

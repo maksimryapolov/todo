@@ -8,6 +8,7 @@ use App\DTO\TaskDTO;
 use App\Entity\TaskEntity;
 use App\Repository\TaskRepository;
 use App\Entity\StatusEntity;
+use App\Views\TaskView;
 
 class TaskServices
 {
@@ -97,5 +98,23 @@ class TaskServices
         $this->taskRepository->getTasks();
 
         return $data;
+    }
+
+    /**
+     * @param TaskEntity $task
+     * @return array<string, string|int>
+     */
+    public function getViewItemData(TaskEntity $taskEntity)
+    {
+        return TaskView::getItem($taskEntity);
+    }
+
+    /**
+     * @param array<int > $taskEntities
+     * @return array
+     */
+    public function getViewListData(array $taskEntities): array
+    {
+        return TaskView::getViewList($taskEntities);
     }
 }

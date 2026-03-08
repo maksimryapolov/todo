@@ -93,7 +93,7 @@ class TaskEntity implements IEntity
     /** @return int */
     public function getStatusId(): int
     {
-        return $this->statusId ?? 0;
+        return $this->statusId ?? $this->status->getId();
     }
 
     /**
@@ -119,9 +119,7 @@ class TaskEntity implements IEntity
         return $this->description;
     }
 
-    /**
-     * @return string
-     */
+    /** @return string */
     public function getDate(): string
     {
         return $this->deadline;
@@ -136,25 +134,19 @@ class TaskEntity implements IEntity
         $this->id = $id;
     }
 
-    /**
-     * @return integer|null
-     */
+    /** @return integer|null */
     public function getId(): ?int
     {
         return $this->id ?? null;
     }
 
-    /**
-     * @return StatusEntity
-     */
+    /**  @return StatusEntity */
     public function getStatus(): StatusEntity
     {
         return $this->status;
     }
 
-    /**
-     * @return DateTime
-     */
+    /**  @return DateTime */
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt;

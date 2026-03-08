@@ -41,7 +41,7 @@ class TaskRepository extends BaseRepository
             "title" => $taskEntity->name,
             "description" => $taskEntity->description,
             "deadline" => $taskEntity->deadline,
-            'status_id' => $taskEntity->status->getId()
+            'status_id' => $taskEntity->getStatusId()
         ]);
 
         $taskEntity->setId((int)$this->connection->id());
@@ -78,6 +78,7 @@ class TaskRepository extends BaseRepository
 
         return TaskEntity::initFromArray((array)$data);
     }
+
     /**
      * @return array<string>
      */

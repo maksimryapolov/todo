@@ -10,6 +10,9 @@ use InvalidArgumentException;
 
 class StatusService
 {
+    /**
+     * TODO: Добавить перечесления
+     */
     public const STATUS_NEW = 'new';
     public const STATUS_PROGRESS = 'progress';
     public const STATUS_COMPLETED = 'completed';
