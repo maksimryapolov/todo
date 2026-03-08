@@ -58,21 +58,15 @@ class TaskRepository extends BaseRepository
      */
     public function getList(int $limit = 10, int $offset = 0, string $sort = 'created_at', string $sortBy = 'ASC'): array
     {
+        // TODO: проверить пагинацию
         $data = $this->connection->select('task',
             [
                 '[>]status' => ['status_id' => 'id'] // LEFT JOIN
             ],
-            [
-                'task.id',
-                'task.title',
-                'task.description',
-                'task.created_at',
-                'task.deadline',
-                'task.status_id(statusId)'
-            ],
+            self::getSelectedParams(),
             [
                 'LIMIT' => [$offset, $limit],
-                'ORDER' => ["task.$sort" => $sortBy]
+                'ORDER' => [self::getTableName() . '.' . $sort => $sortBy]
             ]
         );
 
@@ -85,25 +79,13 @@ class TaskRepository extends BaseRepository
     public static function getSelectedParams(): array
     {
         $params = [
-            'description',
-            'created_at',
-            'status'
+            self::getTableName() . '.title',
+            self::getTableName() . '.description',
+            self::getTableName() . '.created_at',
+            self::getTableName() . '.deadline',
+            self::getTableName() . '.status_id(statusId)',
         ];
 
         return array_merge($params, parent::getSelectedParams());
-    }
-
-    public function getTasks()
-    {
-        $connection = $this->db->getConnection();
-        $params = self::getSelectedParams();
-
-        $data = $connection->select(
-            'task',
-            $params
-        );
-
-        echo'<pre>';var_dump($data);echo'</pre>';
-        die;
     }
 }

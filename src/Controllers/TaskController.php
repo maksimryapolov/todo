@@ -71,21 +71,4 @@ class TaskController extends BaseController // implements ControllerInterface
             return $this->createResponse($response, data: null, error: $e);
         }
     }
-
-    public function getTasks(Request $request, Response $response): Response
-    {
-        try {
-            $data = [];
-            $this->taskServices->getTasks();
-
-
-            $response->getBody()->write(json_encode(['data' => $data]));
-            $response = $response->withHeader('Content-Type', 'application/json');
-            return $response;
-        } catch (Exception $e) {
-            $response->getBody()->write(json_encode(['error' => $e->getMessage()]));
-            return $response->withHeader('Content-Type', 'application/json');
-        }
-    }
-
 }

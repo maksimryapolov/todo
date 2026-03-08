@@ -15,8 +15,7 @@ abstract class BaseRepository
     public static function getSelectedParams(): array
     {
         return [
-            'id',
-            'name'
+            static::getTableName() . '.id'
         ];
     }
 }
