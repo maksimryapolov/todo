@@ -8,16 +8,33 @@ use App\DB\DataBaseConnectios;
 use App\Entity\TaskEntity;
 use Medoo\Medoo;
 
-class TaskRepository
+class TaskRepository extends BaseRepository
 {
     private Medoo $connection;
 
+    private const TABLE_NAME = 'task';
+
+    /**
+     * @param DataBaseConnectios $db
+     */
     public function __construct(
         private DataBaseConnectios $db
     ) {
         $this->connection = $this->db->getConnection();
     }
 
+    /**
+     * @return string
+     */
+    public static function getTableName(): string
+    {
+        return self::TABLE_NAME;
+    }
+
+    /**
+     * @param TaskEntity $taskEntity
+     * @return TaskEntity
+     */
     public function save(TaskEntity $taskEntity): TaskEntity
     {
         $this->connection->insert("task", [
@@ -60,5 +77,32 @@ class TaskRepository
         );
 
         return TaskEntity::initFromArray((array)$data);
+    }
+    /**
+     * @return array<string>
+     */
+    public static function getSelectedParams(): array
+    {
+        $params = [
+            'description',
+            'created_at',
+            'status'
+        ];
+
+        return array_merge($params, parent::getSelectedParams());
+    }
+
+    public function getTasks()
+    {
+        $connection = $this->db->getConnection();
+        $params = self::getSelectedParams();
+
+        $data = $connection->select(
+            'task',
+            $params
+        );
+
+        echo'<pre>';var_dump($data);echo'</pre>';
+        die;
     }
 }

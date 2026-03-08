@@ -11,12 +11,20 @@ use App\Entity\StatusEntity;
 
 class TaskServices
 {
+    /**
+     * @param TaskRepository $taskRepository
+     * @param StatusService $statusService
+     */
     public function __construct(
         private TaskRepository $taskRepository,
         private StatusService $statusService
     ) {
     }
 
+    /**
+     * @param TaskDTO $taskDTO
+     * @return TaskEntity
+     */
     public function create(TaskDTO $taskDTO): TaskEntity
     {
         // StatusService → StatusEntity → TaskEntity → TaskRepository → БД
@@ -78,5 +86,16 @@ class TaskServices
         foreach($taskEntities as $taskEntity) {
             $taskEntity->setStatus($statusesEntity[$taskEntity->getStatusId()]);
         }
+    }
+    /**
+     * @return array<TaskEntity>
+     */
+    public function getTasks(): array
+    {
+        $data = [];
+
+        $this->taskRepository->getTasks();
+
+        return $data;
     }
 }

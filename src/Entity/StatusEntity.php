@@ -6,6 +6,11 @@ namespace App\Entity;
 
 class StatusEntity implements IEntity
 {
+    /**
+     * @param integer $id
+     * @param string $code
+     * @param string $name
+     */
     public function __construct(
         private int $id,
         private string $code,
@@ -13,16 +18,25 @@ class StatusEntity implements IEntity
     ) {
     }
 
+    /**
+     * @return integer
+     */
     public function getId(): int
     {
         return $this->id;
     }
 
+    /**
+     * @return string
+     */
     public function getCode(): string
     {
         return $this->code;
     }
 
+    /**
+     * @return string
+     */
     public function getName(): string
     {
         return $this->name;

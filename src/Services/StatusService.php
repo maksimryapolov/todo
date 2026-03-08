@@ -14,6 +14,9 @@ class StatusService
     public const STATUS_PROGRESS = 'progress';
     public const STATUS_COMPLETED = 'completed';
 
+    /**
+     * @param StatusRepository $statusRepository
+     */
     public function __construct(
         private StatusRepository $statusRepository
     ) {

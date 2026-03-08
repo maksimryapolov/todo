@@ -8,7 +8,11 @@ use App\Validators\Interfaces\ValidateInterface;
 
 class ValidateTask implements ValidateInterface
 {
+    /**
+     * @return array<string>
+     */
     private array $errors = [];
+
     /**
      * @param array {
      *    name: string,
@@ -31,6 +35,9 @@ class ValidateTask implements ValidateInterface
         }
     }
 
+    /**
+     * @return array<string>
+     */
     public function getErrors(): array
     {
         return $this->errors;

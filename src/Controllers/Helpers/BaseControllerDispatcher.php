@@ -8,7 +8,7 @@ use App\Controllers\interfaces\ControllerInterface;
 
 abstract class BaseControllerDispatcher
 {
-    protected $controller;
+    protected /* ControllerInterface */ $controller;
 
     abstract public function initController(): void;
 

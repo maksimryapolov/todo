@@ -9,6 +9,13 @@ use App\Entity\TaskEntity;
 
 class TaskView extends BaseView
 {
+    /**
+     * @param IEntity $task
+     * @return array{
+     *     description: string
+     *     createdAt: string
+     * }
+     */
     protected function getEntitySpecificData(IEntity $task): array
     {
         if ($task instanceof TaskEntity) {

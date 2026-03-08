@@ -13,6 +13,13 @@ use App\Validators\ValidateContext;
 
 class TaskControllerDispatcher extends BaseControllerDispatcher
 {
+    /**
+     * @param StatusRepository $statusRepository
+     * @param StatusService $statusService
+     * @param TaskRepository $taskepository
+     * @param TaskServices $taskServices
+     * @param ValidateContext $context
+     */
     public function __construct(
         private StatusRepository $statusRepository,
         private StatusService $statusService,
@@ -22,6 +29,9 @@ class TaskControllerDispatcher extends BaseControllerDispatcher
     ) {
     }
 
+    /**
+     * @return void
+     */
     public function initController(): void
     {
         $this->controller = new TaskController(
