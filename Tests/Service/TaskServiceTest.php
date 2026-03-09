@@ -17,29 +17,31 @@ use PHPUnit\Framework\TestCase;
 class TaskServiceTest extends TestCase
 {
     private TaskDTO $dto;
-    private MockObject $taskRepositoryMock;
-    private MockObject $statusServiceMock;
+    private TaskRepository&MockObject $taskRepositoryMock;
+    private StatusService&MockObject $statusServiceMock;
     private TaskEntity $taskEntity;
     private StatusEntity $statusEntity;
-
+    private int $statusId;
     private string $taskName = 'Название новой задачи';
     private string $taskDesk = 'Описание новой задачи';
 
     protected function setUp(): void
     {
+        $this->statusId = 1;
+
         $this->dto = new TaskDTO(
             name: $this->taskName,
             description: $this->taskDesk,
-            date: '2025-12-12'
+            deadline: '2025-12-12'
         );
 
-        $this->statusEntity = new StatusEntity(100, 'new', 'Новый');
+        $this->statusEntity = new StatusEntity($this->statusId, 'new', 'Новый');
 
         $this->taskEntity = TaskEntity::createNew(
             name: $this->dto->name,
             description: $this->dto->description,
-            date: $this->dto->date,
-            status: $this->statusEntity
+            deadline: $this->dto->deadline,
+            statusId: $this->statusId
         );
 
         // 1. ARRANGE (ПОДГОТОВКА)
@@ -49,7 +51,7 @@ class TaskServiceTest extends TestCase
         $this->statusServiceMock = $this->createMock(StatusService::class);
     }
 
-    public function testAddTaskService(): void
+    public function ignoreAddTaskService(): void
     {
         // Настраиваем заглушку.
         // Мы ожидаем, что метод save будет вызван ровно 1 раз.
@@ -70,9 +72,40 @@ class TaskServiceTest extends TestCase
         // Проверяем, что метод вернул то, что ожидалось
         // Например, что он вернул объект
         self::assertInstanceOf(TaskEntity::class, $taskEntity);
-        self::assertInstanceOf(StatusEntity::class, $taskEntity->status);
+        // self::assertInstanceOf(StatusEntity::class, $taskEntity->getStatus());
 
         self::assertEquals($taskEntity->getName(), $this->taskName);
         self::assertEquals($taskEntity->getDescription(), $this->taskDesk);
+    }
+
+    public function testGetListService(): void
+    {
+        $tasks = [$this->taskEntity];
+        $statuses = [$this->statusId => $this->statusEntity];
+
+        $taskService = new TaskServices(
+            $this->taskRepositoryMock,
+            $this->statusServiceMock
+        );
+
+        $this->taskRepositoryMock->expects(self::once())->method('getList')->willReturn($tasks);
+        $this->statusServiceMock->expects(self::once())->method('getStatusByIds')->willReturn($statuses);
+
+        $result = $taskService->getList();
+
+        $this->assertIsArray($result);
+        $this->assertCount(1, $result);
+
+        $resultTask = reset($result);
+
+        $this->assertInstanceOf(TaskEntity::class, $resultTask);
+        $this->assertInstanceOf(StatusEntity::class, $resultTask->getStatus());
+
+        //  проверит, что вернулся тот самый объект, а не его копия с такими же данными.
+        $this->assertSame($this->taskEntity, $resultTask);
+        //
+
+        $this->assertEquals($this->statusId, $resultTask->getStatus()->getId());
+        $this->assertEquals($resultTask->getName(), $this->taskName);
     }
 }

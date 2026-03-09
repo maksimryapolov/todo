@@ -33,7 +33,6 @@ class TaskController extends BaseController // implements ControllerInterface
     public function add(Request $request, Response $response): Response
     {
         try {
-            // new ResponseFactory
             $params = $request->getParsedBody();
             $this->validator->validate($params);
 

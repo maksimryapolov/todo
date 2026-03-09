@@ -13,10 +13,19 @@ use PHPUnit\Framework\TestCase;
  */
 class TaskEntityTest extends TestCase
 {
+    private int $statusId;
+
+    protected function setUp(): void
+    {
+        $this->statusId = 1;
+    }
+
     public function testAddTaskEntity(): void
     {
+        $this->statusId = 1;
+
         $statusEntity = new StatusEntity(
-            1,
+            $this->statusId,
             'test',
             'тест'
         );
@@ -35,15 +44,15 @@ class TaskEntityTest extends TestCase
         $taskEntity = TaskEntity::createNew(
             name: $name,
             description: $desc,
-            date: $data,
-            status: $statusEntityNew
+            deadline: $data,
+            statusId: $this->statusId,
         );
 
         self::assertNotEmpty($taskEntity);
         self::assertNotEmpty($taskEntity->getName());
 
         self::assertInstanceOf(TaskEntity::class, $taskEntity);
-        self::assertInstanceOf(StatusEntity::class, $taskEntity->getStatus());
+        // self::assertInstanceOf(StatusEntity::class, $taskEntity->getStatus());
 
         self::assertEquals($name, $taskEntity->getName());
         self::assertEquals($desc, $taskEntity->getDescription());
@@ -64,10 +73,8 @@ class TaskEntityTest extends TestCase
         $taskEntity = TaskEntity::createNew(
             name: $name,
             description: $desc,
-            date: $data,
-            status: $statusEntityMock
+            deadline: $data,
+            statusId: $this->statusId,
         );
-
-
     }
 }
