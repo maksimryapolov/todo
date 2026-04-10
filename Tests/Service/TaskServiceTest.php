@@ -108,4 +108,23 @@ class TaskServiceTest extends TestCase
         $this->assertEquals($this->statusId, $resultTask->getStatus()->getId());
         $this->assertEquals($resultTask->getName(), $this->taskName);
     }
+
+    public function testEmptyGetListService(): void
+    {
+        $tasks = [];
+        $statuses = [];
+
+        $taskService = new TaskServices(
+            $this->taskRepositoryMock,
+            $this->statusServiceMock
+        );
+
+        $this->taskRepositoryMock->expects(self::once())->method('getList')->willReturn($tasks);
+        $this->statusServiceMock->expects(self::once())->method('getStatusByIds')->willReturn($statuses);
+
+        $result = $taskService->getList();
+
+        $this->assertIsArray($result, 'is not array');
+        $this->assertCount(0, $result, 'is not empty');
+    }
 }

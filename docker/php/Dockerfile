@@ -19,6 +19,10 @@ RUN docker-php-ext-install \
 # Устанавливаем Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+RUN apk add --no-cache $PHPIZE_DEPS linux-headers \
+    && pecl install xdebug \
+    && docker-php-ext-enable xdebug
+
 # Настройки PHP
 COPY php.ini /usr/local/etc/php/conf.d/custom.ini
 
